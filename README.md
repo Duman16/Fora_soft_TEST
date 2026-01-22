@@ -34,67 +34,74 @@ src/
 
 ## Установка и запуск
 
-### 1. Клонируйте репозиторий
+### Вариант 1: Полный запуск в Docker (рекомендуется для продакшена)
 
 ```bash
+# 1. Клонируйте репозиторий
 git clone 
 cd crm-task-comments-api
-```
 
-### 2. Установите зависимости
-
-```bash
-npm install
-```
-
-### 3. Настройте переменные окружения
-
-Создайте файл `.env` в корне проекта:
-
-```env
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_USERNAME=postgres
-DB_PASSWORD=postgres
-DB_DATABASE=crm_db
-
-# JWT
-JWT_SECRET=your-secret-key-change-in-production
-JWT_EXPIRES_IN=1h
-JWT_REFRESH_SECRET=your-refresh-secret-key
-JWT_REFRESH_EXPIRES_IN=7d
-
-# Application
-PORT=3000
-```
-
-### 4. Запустите PostgreSQL через Docker
-
-```bash
+# 2. Запустите весь стек (PostgreSQL + NestJS App)
 docker-compose up -d
+
+# Приложение будет доступно на http://localhost:3000
+# Swagger документация: http://localhost:3000/api
 ```
 
-Это запустит PostgreSQL на порту 5432.
-
-### 5. Запустите миграции
+Это запустит оба контейнера:
+- PostgreSQL на порту 5432
+- NestJS API на порту 3000
 
 ```bash
-npm run migration:run
+# Просмотр логов
+docker-compose logs -f app
+
+# Остановка
+docker-compose down
+
+# Остановка с удалением volumes (очистка БД)
+docker-compose down -v
 ```
 
-### 6. Запустите приложение
+### Вариант 2: Разработка (PostgreSQL в Docker, App локально)
+
+Этот вариант удобен для разработки с hot-reload.
 
 ```bash
-# Development mode
+# 1. Клонируйте репозиторий
+git clone 
+cd crm-task-comments-api
+
+# 2. Установите зависимости
+npm install
+
+# 3. Настройте переменные окружения
+cp .env.example .env
+# Отредактируйте .env при необходимости
+
+# 4. Запустите только PostgreSQL
+docker-compose -f docker-compose.dev.yml up -d
+
+# 5. Запустите приложение локально
 npm run start:dev
-
-# Production mode
-npm run build
-npm run start:prod
 ```
 
 Приложение будет доступно по адресу: `http://localhost:3000`
+
+### Вариант 3: Локальный запуск без Docker
+
+```bash
+# 1. Установите PostgreSQL локально
+# 2. Создайте БД crm_db
+# 3. Установите зависимости
+npm install
+
+# 4. Настройте .env с вашими параметрами PostgreSQL
+cp .env.example .env
+
+# 5. Запустите приложение
+npm run start:dev
+```
 
 ## API Документация
 
