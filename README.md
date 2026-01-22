@@ -1,98 +1,290 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# CRM Task Comments API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+REST API модуль "Комментарии к задачам" для CRM-системы.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Технологии
 
-## Description
+- Node.js v18+
+- NestJS v10
+- TypeORM
+- PostgreSQL
+- TypeScript
+- JWT для аутентификации
+- class-validator для валидации
+- Swagger для документации
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Структура проекта
 
-## Project setup
-
-```bash
-$ npm install
+```
+src/
+├── auth/           # Модуль аутентификации (JWT, регистрация, логин)
+├── users/          # Модуль пользователей (CRUD операции)
+├── tasks/          # Модуль задач (CRUD операции)
+├── comments/       # Модуль комментариев (CRUD операции)
+├── config/         # Конфигурация приложения
+├── database/       # Настройки БД и миграции
+└── main.ts         # Точка входа
 ```
 
-## Compile and run the project
+## Предварительные требования
+
+- Docker и Docker Compose
+- Node.js v18 или выше
+- npm или yarn
+
+## Установка и запуск
+
+### 1. Клонируйте репозиторий
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone 
+cd crm-task-comments-api
 ```
 
-## Run tests
+### 2. Установите зависимости
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm install
 ```
 
-## Deployment
+### 3. Настройте переменные окружения
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Создайте файл `.env` в корне проекта:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+```env
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
+DB_DATABASE=crm_db
+
+# JWT
+JWT_SECRET=your-secret-key-change-in-production
+JWT_EXPIRES_IN=1h
+JWT_REFRESH_SECRET=your-refresh-secret-key
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Application
+PORT=3000
+```
+
+### 4. Запустите PostgreSQL через Docker
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker-compose up -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Это запустит PostgreSQL на порту 5432.
 
-## Resources
+### 5. Запустите миграции
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+npm run migration:run
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 6. Запустите приложение
 
-## Support
+```bash
+# Development mode
+npm run start:dev
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Production mode
+npm run build
+npm run start:prod
+```
 
-## Stay in touch
+Приложение будет доступно по адресу: `http://localhost:3000`
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## API Документация
 
-## License
+Swagger документация доступна по адресу: `http://localhost:3000/api`
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+## Основные эндпоинты
+
+### Аутентификация
+
+- `POST /auth/register` - Регистрация пользователя
+- `POST /auth/login` - Вход в систему
+- `POST /auth/refresh` - Обновление токена
+
+### Пользователи
+
+- `POST /users` - Создать пользователя
+- `GET /users` - Получить список всех пользователей
+- `GET /users/:id` - Получить пользователя по ID
+- `PATCH /users/:id` - Редактировать пользователя
+- `DELETE /users/:id` - Удалить пользователя
+
+### Задачи
+
+- `POST /tasks` - Создать задачу (только для роли "пользователь")
+- `GET /tasks` - Получить список всех задач
+- `GET /tasks/:id` - Получить задачу по ID
+- `PATCH /tasks/:id` - Редактировать задачу
+- `DELETE /tasks/:id` - Удалить задачу
+
+### Комментарии
+
+- `POST /comments` - Создать комментарий (только для роли "автор")
+- `GET /comments?task_id=xxx` - Список комментариев к задаче
+- `GET /comments/:id` - Получить комментарий по ID
+- `PATCH /comments/:id` - Редактировать комментарий (только свой)
+- `DELETE /comments/:id` - Удалить комментарий (только свой)
+
+## Бизнес-правила
+
+### Пользователи
+- Роль может быть либо "author" (автор), либо "user" (пользователь)
+- task_id в таблице Users используется для связи с задачами
+
+### Задачи
+- Только пользователи с ролью "user" могут создавать задачи
+- Задачи возвращаются отсортированными по дате (новые первыми)
+- У каждой задачи может быть несколько комментариев
+- Описание задачи: 1-1000 символов
+
+### Комментарии
+- Только пользователи с ролью "author" могут создавать комментарии
+- Редактировать и удалять комментарий может только его автор
+- Текст комментария обязателен (1-1000 символов)
+- Комментарии возвращаются отсортированными по дате (новые первыми)
+- Комментарий привязан только к одной задаче
+
+## Примеры использования
+
+### 1. Регистрация пользователя
+
+```bash
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123",
+    "role": "user"
+  }'
+```
+
+### 2. Вход в систему
+
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "password123"
+  }'
+```
+
+Ответ содержит `access_token` и `refresh_token`.
+
+### 3. Создание задачи (требуется роль "user")
+
+```bash
+curl -X POST http://localhost:3000/tasks \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{
+    "description": "Описание задачи"
+  }'
+```
+
+### 4. Создание комментария (требуется роль "author")
+
+```bash
+curl -X POST http://localhost:3000/comments \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{
+    "taskId": "task-uuid-here",
+    "text": "Текст комментария"
+  }'
+```
+
+## Тестирование
+
+```bash
+# Unit tests
+npm run test
+
+# E2E tests
+npm run test:e2e
+
+# Test coverage
+npm run test:cov
+```
+
+## Архитектурные решения
+
+### 1. Модульная структура
+Каждая функциональность выделена в отдельный модуль (auth, users, tasks, comments). Это обеспечивает:
+- Легкость поддержки и масштабирования
+- Переиспользование кода
+- Четкое разделение ответственности
+
+### 2. TypeORM
+Использование TypeORM для работы с БД:
+- Автоматическая генерация таблиц на основе Entity
+- Поддержка миграций
+- Type-safe запросы
+- Простая работа с отношениями между таблицами
+
+### 3. JWT аутентификация
+Реализована двухтокеновая система:
+- Access token (короткий срок жизни) для API запросов
+- Refresh token (длинный срок жизни) для обновления access token
+Это повышает безопасность системы
+
+### 4. Guard'ы и Decorator'ы
+Использованы для:
+- Проверки аутентификации (JwtAuthGuard)
+- Проверки ролей пользователя (RolesGuard)
+- Получения текущего пользователя (@CurrentUser)
+
+### 5. Валидация данных
+class-validator и class-transformer:
+- Автоматическая валидация входящих данных
+- Трансформация типов
+- Понятные сообщения об ошибках
+
+### 6. Swagger документация
+Автоматическая генерация API документации:
+- Описание всех эндпоинтов
+- Схемы запросов/ответов
+- Возможность тестирования API через UI
+
+### 7. Обработка ошибок
+Использованы встроенные HTTP исключения NestJS:
+- NotFoundException для несуществующих ресурсов
+- ForbiddenException для запрещенных действий
+- BadRequestException для невалидных данных
+
+### 8. Отношения в БД
+- User -> Task: Many-to-One (у пользователя может быть task_id)
+- Task -> Comment: One-to-Many (у задачи много комментариев)
+- User -> Comment: One-to-Many (пользователь может создать много комментариев)
+
+## Улучшения для продакшена
+
+1. **Безопасность**:
+   - Хеширование паролей (bcrypt)
+   - Rate limiting
+   - CORS настройки
+   - Helmet для HTTP заголовков
+
+2. **Логирование**:
+   - Winston или Pino для структурированных логов
+   - Логирование всех запросов и ошибок
+
+3. **Тестирование**:
+   - Unit тесты для всех сервисов
+   - E2E тесты для эндпоинтов
+   - Покрытие кода > 80%
+
+4. **Мониторинг**:
+   - Health checks
+   - Metrics (Prometheus)
+   - APM (Application Performance Monitoring)
+
+5. **Кэширование**:
+   - Redis для часто запрашиваемых данных
