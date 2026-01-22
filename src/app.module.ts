@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { TasksModule } from './tasks/tasks.module';
 import { CommentsModule } from './comments/comments.module';
+import { HealthModule } from './health/health.module';
 import { User } from './users/entities/user.entity';
 import { Task } from './tasks/entities/task.entity';
 import { Comment } from './comments/entities/comment.entity';
@@ -39,6 +40,7 @@ import { Comment } from './comments/entities/comment.entity';
     UsersModule,
     TasksModule,
     CommentsModule,
+    HealthModule,
   ],
 })
 export class AppModule {}

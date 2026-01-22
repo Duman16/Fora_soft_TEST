@@ -295,3 +295,6 @@ class-validator и class-transformer:
 
 5. **Кэширование**:
    - Redis для часто запрашиваемых данных
+
+## Контакты
+
