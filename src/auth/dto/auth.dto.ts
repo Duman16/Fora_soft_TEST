@@ -1,8 +1,8 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID, MinLength } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { UserRole } from '../enums/user-role.enum';
+import { IsEmail, IsEnum, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { UserRole } from '../../users/enums/user-role.enum';
 
-export class CreateUserDto {
+export class RegisterDto {
   @ApiProperty({ example: 'user@example.com' })
   @IsEmail()
   @IsNotEmpty()
@@ -11,39 +11,34 @@ export class CreateUserDto {
   @ApiProperty({ example: 'password123', minLength: 6 })
   @IsString()
   @IsNotEmpty()
-  @MinLength(6)
+  @MinLength(6, { message: 'Пароль должен быть минимум 6 символов' })
   password: string;
 
-  @ApiProperty({ enum: UserRole, example: UserRole.USER })
-  @IsEnum(UserRole)
+  @ApiProperty({ 
+    description: 'Роль пользователя',
+    enum: ['author', 'user'],
+    example: 'user'
+  })
+  @IsEnum(UserRole, { message: 'Роль может быть только author или user' })
   @IsNotEmpty()
   role: UserRole;
-
-  @ApiPropertyOptional({ example: 'uuid-of-task' })
-  @IsUUID()
-  @IsOptional()
-  task_id?: string;
 }
 
-export class UpdateUserDto {
-  @ApiPropertyOptional({ example: 'newemail@example.com' })
+export class LoginDto {
+  @ApiProperty({ example: 'user@example.com' })
   @IsEmail()
-  @IsOptional()
-  email?: string;
+  @IsNotEmpty()
+  email: string;
 
-  @ApiPropertyOptional({ example: 'newpassword123', minLength: 6 })
+  @ApiProperty({ example: 'password123' })
   @IsString()
-  @MinLength(6)
-  @IsOptional()
-  password?: string;
+  @IsNotEmpty()
+  password: string;
+}
 
-  @ApiPropertyOptional({ enum: UserRole })
-  @IsEnum(UserRole)
-  @IsOptional()
-  role?: UserRole;
-
-  @ApiPropertyOptional({ example: 'uuid-of-task' })
-  @IsUUID()
-  @IsOptional()
-  task_id?: string;
+export class RefreshTokenDto {
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  refresh_token: string;
 }
